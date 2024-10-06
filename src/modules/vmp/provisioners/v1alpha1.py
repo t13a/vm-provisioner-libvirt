@@ -25,6 +25,8 @@ class V1Alpha1Generator(abc.GeneratorABC):
     def gen(self, dir: Path):
         vm = self.context.config.vm
         self.write(dir / "Makefile")
+        if vm.ssh and vm.ssh.password:
+            self.write(dir / "sshpass")
         if vm.cloudInit:
             seed_dir = dir / f"{vm.cloudInit.noCloud.seed.path}.d"
             self.write(seed_dir / "meta-data")

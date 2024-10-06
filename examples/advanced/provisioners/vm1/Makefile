@@ -13,7 +13,6 @@ V1ALPHA1_WAIT_FOR_READY_INTERVAL_SECS = 3
 V1ALPHA1_WAIT_FOR_READY_SSH_CONNECT_TIMEOUT_SECS = 3
 
 export LIBVIRT_DEFAULT_URI := qemu:///system
-export SSHPASS := P@ssw0rd
 
 .PHONY: up
 up: build create start
@@ -156,7 +155,7 @@ wait-for-ready/ip:
 
 .PHONY: wait-for-ready/ssh
 wait-for-ready/ssh:
-	until sshpass -e ssh $(V1ALPHA1_SSH_OPTS) $(V1ALPHA1_SSH_EXTRA_OPTS) -o ConnectTimeout=$(V1ALPHA1_WAIT_FOR_READY_SSH_CONNECT_TIMEOUT_SECS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) cloud-init status --wait; do sleep $(V1ALPHA1_WAIT_FOR_READY_INTERVAL_SECS); done
+	until sshpass -f sshpass ssh $(V1ALPHA1_SSH_OPTS) $(V1ALPHA1_SSH_EXTRA_OPTS) -o ConnectTimeout=$(V1ALPHA1_WAIT_FOR_READY_SSH_CONNECT_TIMEOUT_SECS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) cloud-init status --wait; do sleep $(V1ALPHA1_WAIT_FOR_READY_INTERVAL_SECS); done
 
 .PHONY: exec
 exec: CMD := bash
@@ -174,7 +173,7 @@ ip:
 .PHONY: ssh
 ssh: CMD :=
 ssh:
-	@sshpass -e ssh $(V1ALPHA1_SSH_OPTS) $(V1ALPHA1_SSH_EXTRA_OPTS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) $(CMD)
+	@sshpass -f sshpass ssh $(V1ALPHA1_SSH_OPTS) $(V1ALPHA1_SSH_EXTRA_OPTS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) $(CMD)
 
 define create_libvirt_domain
 virsh list --all --name --persistent | ( \
