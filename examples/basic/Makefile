@@ -22,7 +22,7 @@ gen:
 
 .PHONY: clean
 clean:
-	$(VMP) list | xargs rm -rfv
+	$(VMP) list | xargs -I{} rm -rfv $(VMP_GEN_BASE_DIR)/{}
 
 .PHONY: exec
 exec: CMD = bash

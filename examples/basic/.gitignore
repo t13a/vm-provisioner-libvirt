@@ -1,4 +1,4 @@
 .images
-.vmp
 *.iso
 *.qcow2
+vmp
