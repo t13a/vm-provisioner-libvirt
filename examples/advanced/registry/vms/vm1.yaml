@@ -1,0 +1,17 @@
+vms:
+  - name: vm1
+    templates:
+      - common
+      - cloud
+      - cloud+ssh-password
+      - no-ssh-host-key-checking
+    nodeName: localhost
+    image: ubuntu-cloud:24.04
+    vars:
+      SSH_PASSWORD: P@ssw0rd
+    libvirt:
+      domain:
+        virtInstall:
+          memory: 2048 # 2 GiB
+          vcpus: 2
+          graphics: none

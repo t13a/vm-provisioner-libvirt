@@ -1,0 +1,46 @@
+images:
+  - name: alpine-virt
+    tags:
+      - pattern: ^(?P<major>\d+)\.(?P<minor>\d+)\.(?P<patch>\d+)$
+        url: https://dl-cdn.alpinelinux.org/alpine/v{major}.{minor}/releases/x86_64/alpine-virt-{major}.{minor}.{patch}-x86_64.iso
+        volumeName: alpine-virt-{major}.{minor}.{patch}-x86_64.iso
+nodes:
+  - name: localhost
+    libvirt:
+      connection:
+        uri: qemu:///system
+templates:
+  - name: live
+    provisioner: v1alpha1
+    libvirt:
+      domain:
+        name: "{VM_NAME}"
+        virtInstall:
+          osinfo: linux2022
+          disk:
+            - name: live
+              options:
+                vol: "{DEFAULT_POOL_NAME}/{IMAGE_VOLUME_NAME}"
+                format: "{IMAGE_FORMAT}"
+                device: cdrom
+          network:
+            - name: default
+              options:
+                network: "{DEFAULT_NETWORK_NAME}"
+      volumes:
+        - name: "{IMAGE_VOLUME_NAME}"
+          poolName: "{DEFAULT_POOL_NAME}"
+          format: "{IMAGE_FORMAT}"
+          deletionPolicy: Retain
+          uploadFile:
+            path: "{DEFAULT_IMAGE_DIR}/{IMAGE_VOLUME_NAME}"
+vms:
+  - name: vm1
+    template: live
+    nodeName: localhost
+    image: alpine-virt:3.20.3
+    libvirt:
+      domain:
+        virtInstall:
+          memory: 2048 # 2 GiB
+          vcpus: 2

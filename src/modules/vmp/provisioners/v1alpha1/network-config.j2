@@ -1,0 +1,6 @@
+{%- set data = config.vm.cloudInit.noCloud.data.networkConfig %}
+{%- if isinstance(data, dict) %}
+{{- yaml_dump(data) | regex_replace("(macaddress:) ([0-9a-f:]+)", '\\1 "\\2"') }}
+{% else %}
+{{ data }}
+{% endif %}

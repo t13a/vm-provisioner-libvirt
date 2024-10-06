@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+
+import argparse
+import os
+from pathlib import Path
+
+from vmp.loader import Loader
+from vmp.provisioners.generator import Generator
+from vmp.util import yaml_dump
+from vmp.version import VERSION
+
+
+def create_parser():
+    parser = argparse.ArgumentParser(
+        description="A virtual machine provisioning script generator for libvirt."
+    )
+    parser.add_argument(
+        "--registry",
+        default=os.environ.get("VMP_REGISTRY", None),
+        help="specify registry path",
+    )
+    subparsers = parser.add_subparsers()
+    subparsers.required = True
+
+    # config
+    parser_config = subparsers.add_parser(
+        "config", help="load provisioner configuration"
+    )
+    parser_config.add_argument("name", help="specify VM name")
+    parser_config.set_defaults(func=cmd_config)
+
+    # gen
+    parser_gen = subparsers.add_parser("gen", help="generate provisioner")
+    parser_gen.add_argument(
+        "--base-dir",
+        default=os.environ.get("VMP_GEN_BASE_DIR", "."),
+        help="specify base directory",
+    )
+    parser_gen.add_argument("name", nargs="*", help="specify VM name")
+    parser_gen.set_defaults(func=cmd_gen)
+
+    # image-url
+    parser_image_url = subparsers.add_parser(
+        "image-url", help="resolve image URL"
+    )
+    parser_image_url.add_argument("image", help="specify image")
+    parser_image_url.set_defaults(func=cmd_image_url)
+
+    # list
+    parser_list = subparsers.add_parser("list", help="list VM names")
+    parser_list.set_defaults(func=cmd_list)
+
+    # version
+    parser_version = subparsers.add_parser("version", help="print version")
+    parser_version.set_defaults(func=cmd_version)
+
+    return parser
+
+
+def cmd_config(args):
+    loader = Loader(args.registry)
+    config = loader.load(args.name)
+    print(yaml_dump(config.dict(by_alias=True)))
+
+
+def cmd_gen(args):
+    loader = Loader(args.registry)
+    for name in args.name if len(args.name) > 0 else loader.list():
+        config = loader.load(name)
+        generator = Generator(config)
+        generator.gen(Path(args.base_dir) / config.vm.name)
+
+
+def cmd_image_url(args):
+    loader = Loader(args.registry)
+    image = loader.load_image(args.image)
+    print(image.url)
+
+
+def cmd_list(args):
+    loader = Loader(args.registry)
+    print("\n".join(loader.list()))
+
+
+def cmd_version(args):
+    print(VERSION)
+
+
+if __name__ == "__main__":
+    args = create_parser().parse_args()
+    args.func(args)

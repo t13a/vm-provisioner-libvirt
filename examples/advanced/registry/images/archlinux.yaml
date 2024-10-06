@@ -1,0 +1,11 @@
+images:
+  - name: archlinux
+    tags:
+      - pattern: ^latest$
+        url: https://geo.mirror.pkgbuild.com/iso/latest/archlinux-x86_64.iso
+        volumeName: archlinux-x86_64.iso
+        format: raw
+      - pattern: ^(?P<build>\d{4}.\d{2}.\d{2})$
+        url: https://geo.mirror.pkgbuild.com/iso/{build}/archlinux-{build}-x86_64.iso
+        volumeName: archlinux-{build}-x86_64.iso
+        format: raw

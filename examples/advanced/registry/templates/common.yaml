@@ -1,0 +1,4 @@
+templates:
+  - name: common
+    vars:
+      DEFAULT_IMAGE_DIR: ../.images

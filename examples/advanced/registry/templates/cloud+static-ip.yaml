@@ -1,0 +1,28 @@
+templates:
+  - name: cloud+static-ip
+    libvirt:
+      domain:
+        virtInstall:
+          network:
+            - name: default
+              options:
+                mac: "{DEFAULT_MAC_ADDRESS}"
+    cloudInit:
+      noCloud:
+        data:
+          network-config:
+            version: 2
+            ethernets:
+              eth0:
+                match:
+                  macaddress: "{DEFAULT_MAC_ADDRESS}"
+                addresses:
+                  - "{DEFAULT_IP_ADDRESS}/{DEFAULT_NETWORK_PREFIX}"
+                routes:
+                  - to: default
+                    via: "{DEFAULT_NETWORK_GATEWAY}"
+                nameservers:
+                  addresses:
+                    - "{DEFAULT_NETWORK_GATEWAY}"
+    ssh:
+      host: "{DEFAULT_IP_ADDRESS}"

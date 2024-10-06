@@ -1,0 +1,7 @@
+{%- set data = config.vm.cloudInit.noCloud.data.vendorData %}
+{%- if isinstance(data, dict) -%}
+#cloud-config
+{{ yaml_dump(data) }}
+{% else %}
+{{ data }}
+{% endif %}

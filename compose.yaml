@@ -1,0 +1,35 @@
+services:
+  main:
+    build:
+      context: .
+    command:
+      - sleep
+      - infinity
+    environment:
+      - VMP_GEN_BASE_DIR
+      - VMP_REGISTRY
+    hostname: main
+    init: true
+    secrets:
+      - ssh-identity
+      - ssh-identity.pub
+    user: ${MAIN_UID}:${MAIN_GID}
+    volumes:
+      - type: volume
+        source: main-home
+        target: /home/main
+      - type: bind
+        source: ${WORK_DIR}
+        target: /mnt/work
+      - type: bind
+        source: ./src
+        target: /mnt/src
+        read_only: true
+    working_dir: /mnt/work
+secrets:
+  ssh-identity:
+    file: ${SSH_IDENTITY}
+  ssh-identity.pub:
+    file: ${SSH_IDENTITY_PUB}
+volumes:
+  main-home:

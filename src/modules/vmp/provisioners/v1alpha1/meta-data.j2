@@ -1,0 +1,6 @@
+{%- set data = config.vm.cloudInit.noCloud.data.metaData %}
+{%- if isinstance(data, dict) %}
+{{- yaml_dump(data)}}
+{% else %}
+{{ data }}
+{% endif %}

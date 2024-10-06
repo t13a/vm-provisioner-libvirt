@@ -1,0 +1,7 @@
+images:
+  - name: ubuntu-desktop
+    tags:
+      - pattern: ^(?P<version>\d{2}\.\d{2}\.\d+)$
+        url: https://releases.ubuntu.com/{version}/ubuntu-{version}-desktop-amd64.iso
+        volumeName: ubuntu-desktop-{version}-amd64.iso
+        format: raw

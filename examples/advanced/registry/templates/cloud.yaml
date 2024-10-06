@@ -1,0 +1,53 @@
+templates:
+  - name: cloud
+    provisioner: v1alpha1
+    libvirt:
+      domain:
+        name: "{VM_NAME}"
+        virtInstall:
+          osinfo: linux2022
+          disk:
+            - name: boot
+              options:
+                vol: "{VM_NAME}/{VM_NAME}-boot.qcow2"
+                format: "{IMAGE_FORMAT}"
+            - name: seed
+              options:
+                vol: "{VM_NAME}/{VM_NAME}-seed.iso"
+                format: raw
+                device: cdrom
+          network:
+            - name: default
+              options:
+                network: "{DEFAULT_NETWORK_NAME}"
+      pools:
+        - name: "{VM_NAME}"
+          directory:
+            path: "{DEFAULT_POOL_PATH}/{VM_NAME}"
+      volumes:
+        - name: "{IMAGE_VOLUME_NAME}"
+          poolName: "{DEFAULT_POOL_NAME}"
+          format: "{IMAGE_FORMAT}"
+          deletionPolicy: Retain
+          uploadFile:
+            path: "{DEFAULT_IMAGE_DIR}/{IMAGE_VOLUME_NAME}"
+        - name: "{VM_NAME}-boot.qcow2"
+          poolName: "{VM_NAME}"
+          format: "{IMAGE_FORMAT}"
+          backingVolume:
+            name: "{IMAGE_VOLUME_NAME}"
+            poolName: "{DEFAULT_POOL_NAME}"
+            format: "{IMAGE_FORMAT}"
+        - name: "{VM_NAME}-seed.iso"
+          poolName: "{VM_NAME}"
+          format: raw
+          uploadFile:
+            path: "{VM_NAME}-seed.iso"
+    cloudInit:
+      noCloud:
+        data:
+          meta-data:
+            instance-id: "{VM_NAME}"
+            local-hostname: "{VM_NAME}"
+        seed:
+          path: "{VM_NAME}-seed.iso"

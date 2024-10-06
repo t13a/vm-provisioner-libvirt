@@ -1,0 +1,7 @@
+images:
+  - name: fedora-workstation
+    tags:
+      - pattern: ^(?P<version>\d+)-(?P<build>[0-9.]+)$
+        url: https://download.fedoraproject.org/pub/fedora/linux/releases/{version}/Workstation/x86_64/iso/Fedora-Workstation-Live-x86_64-{version}-{build}.iso
+        volumeName: fedora-workstation-{version}-{build}-x86_64.iso
+        format: raw

@@ -1,0 +1,4 @@
+*
+!rootfs
+!src
+__pycache__

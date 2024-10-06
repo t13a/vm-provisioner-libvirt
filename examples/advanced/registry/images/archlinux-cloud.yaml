@@ -1,0 +1,11 @@
+images:
+  - name: archlinux-cloud
+    vars:
+      V1ALPHA1_SSH_USER: arch
+    tags:
+      - pattern: ^latest$
+        url: https://geo.mirror.pkgbuild.com/images/latest/Arch-Linux-x86_64-cloudimg.qcow2
+        volumeName: archlinux-cloud-x86_64.iso
+      - pattern: ^(?P<build>\d{8}.\d{6})$
+        url: https://geo.mirror.pkgbuild.com/images/v{build}/Arch-Linux-x86_64-cloudimg-{build}.qcow2
+        volumeName: archlinux-cloud-{build}-x86_64.iso

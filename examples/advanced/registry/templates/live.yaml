@@ -1,0 +1,25 @@
+templates:
+  - name: live
+    provisioner: v1alpha1
+    libvirt:
+      domain:
+        name: "{VM_NAME}"
+        virtInstall:
+          osinfo: linux2022
+          disk:
+            - name: live
+              options:
+                vol: "{DEFAULT_POOL_NAME}/{IMAGE_VOLUME_NAME}"
+                format: "{IMAGE_FORMAT}"
+                device: cdrom
+          network:
+            - name: default
+              options:
+                network: "{DEFAULT_NETWORK_NAME}"
+      volumes:
+        - name: "{IMAGE_VOLUME_NAME}"
+          poolName: "{DEFAULT_POOL_NAME}"
+          format: "{IMAGE_FORMAT}"
+          deletionPolicy: Retain
+          uploadFile:
+            path: "{DEFAULT_IMAGE_DIR}/{IMAGE_VOLUME_NAME}"

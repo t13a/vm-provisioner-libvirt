@@ -1,0 +1,8 @@
+images:
+  - name: fedora-cloud
+    vars:
+      V1ALPHA1_SSH_USER: fedora
+    tags:
+      - pattern: ^(?P<version>\d+)-(?P<build>[0-9.]+)$
+        url: https://download.fedoraproject.org/pub/fedora/linux/releases/{version}/Cloud/x86_64/images/Fedora-Cloud-Base-Generic.x86_64-{version}-{build}.qcow2
+        volumeName: fedora-cloud-{version}-{build}-x86_64.qcow2

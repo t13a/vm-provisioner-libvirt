@@ -1,0 +1,6 @@
+templates:
+  - name: no-ssh-host-key-checking
+    ssh:
+      options:
+        StrictHostKeyChecking: "no"
+        UserKnownHostsFile: /dev/null

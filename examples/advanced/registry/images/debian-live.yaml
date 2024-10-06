@@ -1,0 +1,7 @@
+images:
+  - name: debian-live
+    tags:
+      - pattern: ^(?P<version>\d+.\d+.\d+)-(?P<flavor>.+)$
+        url: https://cdimage.debian.org/debian-cd/{version}-live/amd64/iso-hybrid/debian-live-{version}-amd64-{flavor}.iso
+        volumeName: debian-live-{version}-{flavor}-amd64.iso
+        format: raw

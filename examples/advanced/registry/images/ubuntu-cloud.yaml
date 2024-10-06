@@ -1,0 +1,11 @@
+images:
+  - name: ubuntu-cloud
+    vars:
+      V1ALPHA1_SSH_USER: ubuntu
+    tags:
+      - pattern: ^(?P<version>\d{2}\.\d{2})$
+        url: https://cloud-images.ubuntu.com/releases/{version}/release/ubuntu-{version}-server-cloudimg-amd64.img
+        volumeName: ubuntu-cloud-{version}-amd64.qcow2
+      - pattern: ^(?P<version>\d{2}\.\d{2})-(?P<build>\d{8}(\.\d+)?)$
+        url: https://cloud-images.ubuntu.com/releases/{version}/release-{build}/ubuntu-{version}-server-cloudimg-amd64.img
+        volumeName: ubuntu-cloud-{version}-{build}-amd64.qcow2
