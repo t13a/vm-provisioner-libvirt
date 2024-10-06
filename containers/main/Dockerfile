@@ -34,7 +34,6 @@ RUN python3 -m venv /mnt/venv \
         PyYAML==6.0
 
 COPY rootfs .
-COPY src /mnt/src
 
 # Allow user to change UID/GID at startup.
 RUN useradd -m -s /bin/bash -u 1000 -U main \

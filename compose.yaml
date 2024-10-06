@@ -1,7 +1,7 @@
 services:
   main:
     build:
-      context: .
+      context: containers/main
     command:
       - sleep
       - infinity
