@@ -10,10 +10,10 @@ A virtual machine provisioning script generator for [libvirt](https://libvirt.or
 
 ## Installation
 
-Download [the latest release](https://github.com/t13a/vmp-provisioner-libvirt/releases/latest).
+Download [the latest release](https://github.com/t13a/vm-provisioner-libvirt/releases/latest).
 
 ```console
-$ curl -LO https://github.com/t13a/vmp-provisioner-libvirt/releases/latest/download/vmp
+$ curl -LO https://github.com/t13a/vm-provisioner-libvirt/releases/latest/download/vmp
 $ chmod a+x vmp
 ```
 
