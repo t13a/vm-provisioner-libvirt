@@ -35,13 +35,13 @@ class RecursiveMapping(Mapping[str, str]):
     def __init__(
         self,
         vars: dict[str, str],
-        memo: dict[str, str] = {},
-        path: list[str] = [],
+        memo: dict[str, str] | None = None,
+        path: list[str] | None = None,
     ):
         super().__init__()
         self._vars = vars
-        self._memo = memo
-        self._path = path
+        self._memo = memo if memo else {}
+        self._path = path if path else []
 
     def __getitem__(self, key):
         if key in self._memo:
