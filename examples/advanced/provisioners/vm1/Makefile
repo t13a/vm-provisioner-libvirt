@@ -147,15 +147,14 @@ stop/pool/vm1:
 	$(call stop_libvirt_pool,vm1)
 
 .PHONY: wait-for-ready
-wait-for-ready: wait-for-ready/ip wait-for-ready/ssh
-
-.PHONY: wait-for-ready/ip
-wait-for-ready/ip:
-	until $(V1ALPHA1_IP_CMD); do sleep $(V1ALPHA1_WAIT_FOR_READY_INTERVAL_SECS); done
-
-.PHONY: wait-for-ready/ssh
-wait-for-ready/ssh:
-	until sshpass -f sshpass ssh $(V1ALPHA1_SSH_OPTS) $(V1ALPHA1_SSH_EXTRA_OPTS) -o ConnectTimeout=$(V1ALPHA1_WAIT_FOR_READY_SSH_CONNECT_TIMEOUT_SECS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) cloud-init status --wait; do sleep $(V1ALPHA1_WAIT_FOR_READY_INTERVAL_SECS); done
+wait-for-ready:
+	script -c 'virsh console --force vm1' /dev/null & \
+	pid=$$!; \
+	trap 'kill -KILL $$pid' EXIT; \
+	until sshpass -f sshpass ssh $(V1ALPHA1_SSH_OPTS) $(V1ALPHA1_SSH_EXTRA_OPTS) -o ConnectTimeout=$(V1ALPHA1_WAIT_FOR_READY_SSH_CONNECT_TIMEOUT_SECS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) cloud-init status --wait > /dev/null 2>&1; \
+	do \
+		sleep $(V1ALPHA1_WAIT_FOR_READY_INTERVAL_SECS); \
+	done
 
 .PHONY: exec
 exec: CMD := bash
