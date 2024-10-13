@@ -196,7 +196,7 @@ stop/pool/{{ pool.name }}:
 
 .PHONY: wait-for-ready
 wait-for-ready:
-	script -c 'virsh console --force vm1' /dev/null & \
+	script -c 'virsh console --force {{ domain.name }}' /dev/null & \
 	pid=$$!; \
 	trap 'kill -KILL $$pid' EXIT; \
 	until {{ ssh_cmd }} -o ConnectTimeout=$(V1ALPHA1_WAIT_FOR_READY_SSH_CONNECT_TIMEOUT_SECS) $(V1ALPHA1_SSH_USER)@$(V1ALPHA1_SSH_HOST) {% if cloudInit %}cloud-init status --wait{% else %}true{% endif %} > /dev/null 2>&1; \
