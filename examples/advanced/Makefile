@@ -2,8 +2,8 @@
 MAKEFLAGS += --no-builtin-rules --no-builtin-variables --warn-undefined-variables
 SHELL := bash -euo pipefail
 
-VMP = ./vmp
-VMP_URL = https://github.com/t13a/vm-provisioner-libvirt/releases/latest/download/vmp
+VMP ?= ./vmp
+VMP_URL ?= https://github.com/t13a/vm-provisioner-libvirt/releases/latest/download/vmp
 
 export VMP_GEN_BASE_DIR := provisioners
 export VMP_REGISTRY := registry/**/*.yaml

@@ -6,6 +6,7 @@ services:
       - sleep
       - infinity
     environment:
+      - VMP=${VMP:-/mnt/src/scripts/vmp}
       - VMP_GEN_BASE_DIR
       - VMP_REGISTRY
     hostname: main
