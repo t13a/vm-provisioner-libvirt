@@ -41,7 +41,7 @@ create/volume/default/alpine-virt-3.20.3-x86_64.iso: .images/alpine-virt-3.20.3-
 .PHONY: create/domain
 create/domain: , = ,
 create/domain:
-	$(call create_libvirt_domain,vm1,virt-install \
+	$(call create_libvirt_domain,vm1,,virt-install \
 		--disk=device=cdrom$(,)format=qcow2$(,)vol=default/alpine-virt-3.20.3-x86_64.iso \
 		--memory=2048 \
 		--network=network=default \
@@ -105,7 +105,11 @@ define create_libvirt_domain
 virsh list --all --name --persistent | ( \
 	if ! grep -q '^\s*$(1)\s*$$'; \
 	then \
-		$(2) | tee /dev/stderr | virsh define /dev/stdin; \
+		$(3) | tee /dev/stderr | virsh define /dev/stdin; \
+		if [ "$(2)" = autostart ]; \
+		then \
+				virsh autostart $(1); \
+		fi; \
 	fi \
 )
 endef

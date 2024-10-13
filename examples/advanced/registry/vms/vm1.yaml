@@ -11,6 +11,7 @@ vms:
       SSH_PASSWORD: P@ssw0rd
     libvirt:
       domain:
+        autostart: true
         virtInstall:
           memory: 2048 # 2 GiB
           vcpus: 2

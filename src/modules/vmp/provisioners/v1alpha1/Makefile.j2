@@ -85,7 +85,7 @@ create/pool:{% for pool in pools %} create/pool/{{ pool.name }}{% endfor %}
 
 .PHONY: create/pool/{{ pool.name }}
 create/pool/{{ pool.name }}:
-	$(call create_libvirt_pool,{{ pool.name }},{{ pool.directory.path }})
+	$(call create_libvirt_pool,{{ pool.name }},{{ "autostart" if pool.autostart else "" }},{{ pool.directory.path }})
 {%- endfor %}
 {%- if volumes | length > 0 %}
 
@@ -108,7 +108,7 @@ create/volume/{{ volume.poolName }}/{{ volume.name }}:{% if volume.poolName in p
 .PHONY: create/domain
 create/domain: , = ,
 create/domain:
-	$(call create_libvirt_domain,{{ domain.name }},virt-install \
+	$(call create_libvirt_domain,{{ domain.name }},{{ 'autostart' if domain.autostart else '' }},virt-install \
 	{%- for arg in virt_install_args() %}
 		{{ arg | replace(",", "$(,)") }} \
 	{%- endfor %}
@@ -232,7 +232,11 @@ define create_libvirt_domain
 virsh list --all --name --persistent | ( \
 	if ! grep -q '^\s*$(1)\s*$$'; \
 	then \
-		$(2) | tee /dev/stderr | virsh define /dev/stdin; \
+		$(3) | tee /dev/stderr | virsh define /dev/stdin; \
+		if [ "$(2)" = autostart ]; \
+		then \
+				virsh autostart $(1); \
+		fi; \
 	fi \
 )
 endef
@@ -269,8 +273,11 @@ define create_libvirt_pool
 virsh pool-list --all --name --persistent | ( \
 	if ! grep -q '^\s*$(1)\s*$$'; \
 	then \
-		virsh pool-define-as $(1) dir --target $(2); \
-		virsh pool-autostart $(1); \
+		virsh pool-define-as $(1) dir --target $(3); \
+		if [ "$(2)" = autostart ]; \
+		then \
+				virsh pool-autostart $(1); \
+		fi; \
 	fi \
 )
 endef

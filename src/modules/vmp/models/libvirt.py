@@ -14,6 +14,7 @@ class Connection(BaseModel, extra=Extra.forbid):
 
 class Domain(BaseModel, extra=Extra.forbid):
     name: str
+    autostart: bool = False
 
 
 class CreateDomainWithVirtInstall(Domain, extra=Extra.forbid):
@@ -26,6 +27,7 @@ class CreateDomainWithVirtInstall(Domain, extra=Extra.forbid):
 
 class Pool(BaseModel, extra=Extra.forbid):
     name: str
+    autostart: bool = False
 
 
 class DirectoryPool(Pool, extra=Extra.forbid):

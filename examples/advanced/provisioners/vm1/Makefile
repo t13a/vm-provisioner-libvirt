@@ -45,7 +45,7 @@ create/pool: create/pool/vm1
 
 .PHONY: create/pool/vm1
 create/pool/vm1:
-	$(call create_libvirt_pool,vm1,/var/lib/libvirt/images/vm1)
+	$(call create_libvirt_pool,vm1,autostart,/var/lib/libvirt/images/vm1)
 
 .PHONY: create/volume
 create/volume: create/volume/default/ubuntu-cloud-24.04-amd64.qcow2 create/volume/vm1/vm1-boot.qcow2 create/volume/vm1/vm1-seed.iso
@@ -65,7 +65,7 @@ create/volume/vm1/vm1-seed.iso: start/pool/vm1 vm1-seed.iso
 .PHONY: create/domain
 create/domain: , = ,
 create/domain:
-	$(call create_libvirt_domain,vm1,virt-install \
+	$(call create_libvirt_domain,vm1,autostart,virt-install \
 		--disk=format=qcow2$(,)vol=vm1/vm1-boot.qcow2 \
 		--disk=device=cdrom$(,)format=raw$(,)vol=vm1/vm1-seed.iso \
 		--graphics=none \
@@ -179,7 +179,11 @@ define create_libvirt_domain
 virsh list --all --name --persistent | ( \
 	if ! grep -q '^\s*$(1)\s*$$'; \
 	then \
-		$(2) | tee /dev/stderr | virsh define /dev/stdin; \
+		$(3) | tee /dev/stderr | virsh define /dev/stdin; \
+		if [ "$(2)" = autostart ]; \
+		then \
+				virsh autostart $(1); \
+		fi; \
 	fi \
 )
 endef
@@ -215,8 +219,11 @@ define create_libvirt_pool
 virsh pool-list --all --name --persistent | ( \
 	if ! grep -q '^\s*$(1)\s*$$'; \
 	then \
-		virsh pool-define-as $(1) dir --target $(2); \
-		virsh pool-autostart $(1); \
+		virsh pool-define-as $(1) dir --target $(3); \
+		if [ "$(2)" = autostart ]; \
+		then \
+				virsh pool-autostart $(1); \
+		fi; \
 	fi \
 )
 endef

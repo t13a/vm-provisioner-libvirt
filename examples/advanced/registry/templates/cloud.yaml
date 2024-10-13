@@ -22,6 +22,7 @@ templates:
                 network: "{DEFAULT_NETWORK_NAME}"
       pools:
         - name: "{VM_NAME}"
+          autostart: true
           directory:
             path: "{DEFAULT_POOL_PATH}/{VM_NAME}"
       volumes:
