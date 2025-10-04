@@ -1,4 +1,4 @@
-FROM debian:12
+FROM debian:13
 
 RUN apt-get update \
     && apt-get --no-install-recommends install -y \
@@ -31,7 +31,7 @@ RUN python3 -m venv /mnt/venv \
         pydantic==1.10.4 \
         pyinstaller-hooks-contrib==2024.8 \
         pyinstaller==6.10.0 \
-        PyYAML==6.0
+        PyYAML==6.0.2
 
 COPY rootfs .
 
