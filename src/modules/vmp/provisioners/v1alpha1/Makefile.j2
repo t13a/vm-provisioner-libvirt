@@ -242,7 +242,7 @@ define delete_libvirt_domain
 virsh list --all --name --persistent | ( \
 	if grep -q '^\s*$(1)\s*$$'; \
 	then \
-		virsh undefine $(1); \
+		virsh undefine --nvram $(1); \
 	fi \
 )
 endef
